@@ -124,7 +124,22 @@ mockCVData = [
 env = Environment(loader=FileSystemLoader('.'))
 template = env.get_template('sample.html')
 
+def strip_tags(html):
+    class MLStripper(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.reset()
+            self.fed = []
 
+        def handle_data(self, d):
+            self.fed.append(d)
+
+        def get_data(self):
+            return ''.join(self.fed)
+
+    stripper = MLStripper()
+    stripper.feed(html)
+    return stripper.get_data()
 
 # Function to create a Word document from the HTML content
 def create_word_document(cv_data,html_content, output_file):
