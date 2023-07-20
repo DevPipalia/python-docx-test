@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<p>
+    <!-- <h1>{{ cv_data.name }}</h1> -->
+
+    <p> {{ cv_data.email }} | {{ cv_data.socialMedia.linkedin }} | {{ cv_data.socialMedia.twitter }} | {{ cv_data.socialMedia.github }} </p>
+
+    <!-- {% if cv_data.socialMedia.linkedin or cv_data.socialMedia.twitter or cv_data.socialMedia.github %}
+    <p>
+        {% if cv_data.socialMedia.linkedin %} {{ cv_data.socialMedia.linkedin }}{% endif %}
+        {% if cv_data.socialMedia.linkedin and (cv_data.socialMedia.twitter or cv_data.socialMedia.github) %} | {% endif %}
+        {% if cv_data.socialMedia.twitter %} {{ cv_data.socialMedia.twitter }}{% endif %}
+        {% if cv_data.socialMedia.twitter and cv_data.socialMedia.github %} | {% endif %}
+        {% if cv_data.socialMedia.github %} {{ cv_data.socialMedia.github }}{% endif %}
+    </p>
+    {% endif %} -->
+
+
+    <h2>Education</h2>
+    <p>{{ cv_data.education[0].university }} - {{ cv_data.education[0].location }}</p>
+    <p>{{ cv_data.education[0].startDate }} - {{ cv_data.education[0].endDate }}</p>
+    <p>{{ cv_data.education[0].degree }} in {{ cv_data.education[0].major }}</p>
+    <p>GPA: {{ cv_data.education[0].gpa }}</p>
+    
+    
+
+
+    <h2>Professional Experience</h2>
+    <ul>
+        {% for experience in cv_data.professionalExperience %}
+        <li>
+            <h3>{{ experience.title }}</h3>
+            <p>{{ experience.startDate }} - {% if experience.endDate == "Present" %}Present{% else %}{{ experience.endDate }}{% endif %}</p>
+            <p>{{ experience.company }} - {{ experience.location }}</p>
+            <ul>
+                {% for point in experience.points %}
+                <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Skills</h2>
+    <ul>
+        {% for skill in cv_data.skills %}
+        <li>{{ skill }}</li>
+        {% endfor %}
+    </ul>
+
+    
+
+    <h2>Languages</h2>
+    <ul>
+        {% for language in cv_data.languages %}
+        <li>{{ language }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if cv_data.certifications %}
+    <h2>Certifications</h2>
+    <ul>
+        {% for certification in cv_data.certifications %}
+        <li>{{ certification }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <h2>Interests</h2>
+    <ul>
+        {% for interest in cv_data.interests %}
+        <li>{{ interest }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
