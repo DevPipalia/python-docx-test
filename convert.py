@@ -387,12 +387,11 @@ def create_word_document(cv_data,html_content, output_file):
     skills_languages_line = f"Skills: {', '.join(skills)} | Languages: {', '.join(languages)}"
     skills_languages_paragraph.add_run(skills_languages_line)
 
-    document.add_paragraph(plain_text, style='BodyText')
 
     document.save(output_file)
 rendered_cv = template.render(cv_data=mockCVData[0])
 
-output_file_path = 'output_cv38.docx'
+output_file_path = 'output_cv39.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
