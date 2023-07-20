@@ -105,11 +105,21 @@ mockCVData = [
             {
                 "degree": "Bachelor of Arts",
                 "major": "Women and Gender Studies",
+                "minor":"Machine learning",
                 "university": "UNIVERSITY OF WINNIPEG",
                 "location": "Winnipeg, Canada",
                 "gpa":3.0,
                 "startDate":2019,
                 "endDate":2022
+            },
+            {
+                "degree": "High school",
+                "major": "Science",
+                "university": "Ryan international School",
+                "location": "Mumbai,India",
+                "gpa":4.0,
+                "startDate":2007,
+                "endDate":2017
             }
         ],
         "languages": ["English", "Mandarin"],
@@ -206,21 +216,49 @@ def create_word_document(cv_data,html_content, output_file):
     # Add a paragraph with an underscore character and apply the custom style
     line_paragraph = document.add_paragraph("________________________________________________________________________________________________________", style='HorizontalLine')
     
-    education_details_paragraph = document.add_paragraph()
-    education_details_paragraph.add_run(f"{cv_data['education'][0]['university']} - {cv_data['education'][0]['location']}")
+    # education_details_paragraph = document.add_paragraph()
+    # education_details_paragraph.add_run(f"{cv_data['education'][0]['university']} - {cv_data['education'][0]['location']}")
 
-    # Set tab stops for right alignment of start date and end date
-    tab_stops = education_details_paragraph.paragraph_format.tab_stops
-    tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
+    # # Set tab stops for right alignment of start date and end date
+    # tab_stops = education_details_paragraph.paragraph_format.tab_stops
+    # tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
 
-    # Add the start date and end date with right-aligned tab stops
-    education_details_paragraph.add_run("\t")  # Add a tab character for right alignment
-    education_details_paragraph.add_run(f"{cv_data['education'][0]['startDate']} - {cv_data['education'][0]['endDate']}")
+    # # Add the start date and end date with right-aligned tab stops
+    # education_details_paragraph.add_run("\t")  # Add a tab character for right alignment
+    # education_details_paragraph.add_run(f"{cv_data['education'][0]['startDate']} - {cv_data['education'][0]['endDate']}")
 
-    degree_gpa_paragraph = document.add_paragraph()
-    degree_gpa_line = f"{cv_data['education'][0]['degree']} in {cv_data['education'][0]['major']} | GPA: {cv_data['education'][0]['gpa']:.2f}/5.00"
-    degree_gpa_paragraph.add_run(degree_gpa_line)
+    # degree_gpa_paragraph = document.add_paragraph()
+    # degree_gpa_line = f"{cv_data['education'][0]['degree']} in {cv_data['education'][0]['major']} | GPA: {cv_data['education'][0]['gpa']:.2f}/5.00"
+    # degree_gpa_paragraph.add_run(degree_gpa_line)
 
+    # minor_paragraph = document.add_paragraph()
+    # minor_paragraph.add_run(f"Minor: {cv_data['education'][0]['minor']}").bold = False
+    # minor_paragraph.style = "List Bullet"
+
+    for education_entry in cv_data['education']:
+        # Adding the education details
+        education_details_paragraph = document.add_paragraph()
+        university_line = f"{education_entry['university']} - {education_entry['location']}"
+        education_details_paragraph.add_run(university_line)
+
+        # Set tab stops for right alignment of start date and end date
+        tab_stops = education_details_paragraph.paragraph_format.tab_stops
+        tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
+
+        # Add the start date and end date with right-aligned tab stops
+        education_details_paragraph.add_run("\t")  # Add a tab character for right alignment
+        education_details_paragraph.add_run(f"{education_entry['startDate']} - {education_entry['endDate']}")
+
+        # Adding a new line for the degree, major, and GPA
+        degree_gpa_paragraph = document.add_paragraph()
+        degree_gpa_line = f"{education_entry['degree']} in {education_entry['major']} | GPA: {education_entry['gpa']:.2f}/5.00"
+        degree_gpa_paragraph.add_run(degree_gpa_line)
+
+        # If 'minor' is present, add it as a bullet point on the line below degree_gpa_paragraph
+        if 'minor' in education_entry:
+            minor_paragraph = document.add_paragraph()
+            minor_paragraph.add_run(f"Minor: {education_entry['minor']}").bold = False
+            minor_paragraph.style = "List Bullet"
 
 
 
@@ -235,7 +273,7 @@ def create_word_document(cv_data,html_content, output_file):
 rendered_cv = template.render(cv_data=mockCVData[0])
 
 # Convert HTML to Word document
-output_file_path = 'output_cv19.docx'
+output_file_path = 'output_cv22.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
