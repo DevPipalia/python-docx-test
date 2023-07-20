@@ -360,12 +360,39 @@ def create_word_document(cv_data,html_content, output_file):
             bullet_point_paragraph = document.add_paragraph(style='ListBullet')
             bullet_point_paragraph.add_run(point)
 
+
+    other_info_title_paragraph = document.add_paragraph()
+    other_info_title_run = other_info_title_paragraph.add_run("Other Information")
+
+    # Set the title font to bold
+    other_info_title_run.bold = True
+
+    # Set the font size for the title (e.g., set to 14 points)
+    other_info_title_run.font.size = Pt(14)
+
+    # Center align the "Other Information" title paragraph
+    other_info_title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+    # Add the underline style to the title paragraph
+    other_info_title_paragraph.runs[-1].underline = True
+
+    # Remove the space after the "Other Information" title paragraph
+    other_info_title_paragraph.paragraph_format.space_after = Pt(0)
+
+    other_info_line_paragraph = document.add_paragraph("________________________________________________________________________________________________________", style='HorizontalLine')
+
+    skills = cv_data.get('skills', [])
+    languages = cv_data.get('languages', [])
+    skills_languages_paragraph = document.add_paragraph()
+    skills_languages_line = f"Skills: {', '.join(skills)} | Languages: {', '.join(languages)}"
+    skills_languages_paragraph.add_run(skills_languages_line)
+
     document.add_paragraph(plain_text, style='BodyText')
 
     document.save(output_file)
 rendered_cv = template.render(cv_data=mockCVData[0])
 
-output_file_path = 'output_cv36.docx'
+output_file_path = 'output_cv38.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
