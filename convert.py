@@ -35,6 +35,8 @@ import os
 from jinja2 import Environment, FileSystemLoader
 from docx import Document
 from docx.shared import Inches,Pt,Cm
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT, WD_TAB_ALIGNMENT, WD_TAB_LEADER
+from docx.enum.style import WD_STYLE_TYPE
 from html.parser import HTMLParser
 
 # Define your mock CV data here (or import it from another file)
@@ -105,7 +107,7 @@ mockCVData = [
                 "major": "Women and Gender Studies",
                 "university": "UNIVERSITY OF WINNIPEG",
                 "location": "Winnipeg, Canada",
-                "gpa":3.0/5.0,
+                "gpa":3.0,
                 "startDate":2019,
                 "endDate":2022
             }
@@ -149,8 +151,16 @@ def create_word_document(cv_data,html_content, output_file):
     section = document.sections[0]
     section.top_margin = Cm(0.3)  # Adjust the top margin in centimeters
     name_paragraph = document.add_paragraph()
-    name_paragraph.add_run(mockCVData[0]['name']).bold = True
-    name_paragraph.alignment = 1  # 1 means centered alignment
+    name_run = name_paragraph.add_run(cv_data['name'])
+
+    # Set the name font to bold
+    name_run.bold = True
+
+    # Set the font size for the name (e.g., set to 16 points)
+    name_run.font.size = Pt(16)
+
+    # Center align the name paragraph
+    name_paragraph.alignment = 1
     name_paragraph_format = name_paragraph.paragraph_format
     name_paragraph_format.space_after = Pt(1)
 
@@ -170,6 +180,51 @@ def create_word_document(cv_data,html_content, output_file):
         if social_media.get('github'):
             contact_info_paragraph.add_run(social_media['github'])
     contact_info_paragraph.alignment = 1
+    contact_info_paragraph_format = contact_info_paragraph.paragraph_format
+    contact_info_paragraph_format.space_after = Pt(1)
+
+
+    # Adding the "Education" title paragraph
+    education_title_paragraph = document.add_paragraph()
+    education_title_run = education_title_paragraph.add_run("Education")
+
+    # Set the title font to bold
+    education_title_run.bold = True
+
+    # Set the font size for the title (e.g., set to 14 points)
+    education_title_run.font.size = Pt(12)
+
+    # Center align the "Education" title paragraph
+    education_title_paragraph.alignment = 1
+    education_title_paragraph_format=education_title_paragraph.paragraph_format
+    education_title_paragraph_format.space_after=Pt(0)
+
+
+    line_style = document.styles.add_style('HorizontalLine', WD_STYLE_TYPE.PARAGRAPH)
+    line_style.font.underline = True
+
+    # Add a paragraph with an underscore character and apply the custom style
+    line_paragraph = document.add_paragraph("________________________________________________________________________________________________________", style='HorizontalLine')
+    
+    education_details_paragraph = document.add_paragraph()
+    education_details_paragraph.add_run(f"{cv_data['education'][0]['university']} - {cv_data['education'][0]['location']}")
+
+    # Set tab stops for right alignment of start date and end date
+    tab_stops = education_details_paragraph.paragraph_format.tab_stops
+    tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
+
+    # Add the start date and end date with right-aligned tab stops
+    education_details_paragraph.add_run("\t")  # Add a tab character for right alignment
+    education_details_paragraph.add_run(f"{cv_data['education'][0]['startDate']} - {cv_data['education'][0]['endDate']}")
+
+    degree_gpa_paragraph = document.add_paragraph()
+    degree_gpa_line = f"{cv_data['education'][0]['degree']} in {cv_data['education'][0]['major']} | GPA: {cv_data['education'][0]['gpa']:.2f}/5.00"
+    degree_gpa_paragraph.add_run(degree_gpa_line)
+
+
+
+
+
 
 
     document.add_paragraph(plain_text, style='BodyText')
@@ -180,7 +235,7 @@ def create_word_document(cv_data,html_content, output_file):
 rendered_cv = template.render(cv_data=mockCVData[0])
 
 # Convert HTML to Word document
-output_file_path = 'output_cv4.docx'
+output_file_path = 'output_cv19.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
