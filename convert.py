@@ -261,6 +261,42 @@ def create_word_document(cv_data,html_content, output_file):
             minor_paragraph.style = "List Bullet"
 
 
+        experience_title_paragraph = document.add_paragraph()
+    experience_title_run = experience_title_paragraph.add_run("Professional Experience")
+
+    # Set the title font to bold
+    experience_title_run.bold = True
+
+    # Set the font size for the title (e.g., set to 14 points)
+    experience_title_run.font.size = Pt(12)
+
+    # Center align the "Professional Experience" title paragraph
+    experience_title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+
+    # Add a paragraph with an underscore character and apply the custom style for horizontal line
+    experience_line_paragraph = document.add_paragraph("________________________________________________________________________________________________________", style='HorizontalLine')
+
+    for experience_entry in cv_data['professionalExperience']:
+        # Adding the professional experience details
+        experience_details_paragraph = document.add_paragraph()
+        experience_details_line = f"{experience_entry['company']} - {experience_entry['location']} "
+        experience_details_paragraph.add_run(experience_details_line)
+
+        tab_stops = experience_details_paragraph.paragraph_format.tab_stops
+        tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
+
+        # Add the start date and end date with right-aligned tab stops
+        experience_details_paragraph.add_run("\t")  # Add a tab character for right alignment
+        experience_details_paragraph.add_run(f"{experience_entry['startDate']} - {experience_entry['endDate']}")
+        
+        experience_title_line = experience_entry['title']
+        experience_title_paragraph = document.add_paragraph(experience_title_line)
+
+        # Adding the points array data as bullet points
+        if 'points' in experience_entry:
+            for point in experience_entry['points']:
+                points_paragraph = document.add_paragraph(point)
+                points_paragraph.style = 'List Bullet'
 
 
 
@@ -273,7 +309,7 @@ def create_word_document(cv_data,html_content, output_file):
 rendered_cv = template.render(cv_data=mockCVData[0])
 
 # Convert HTML to Word document
-output_file_path = 'output_cv22.docx'
+output_file_path = 'output_cv27.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
