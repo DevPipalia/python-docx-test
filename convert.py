@@ -147,10 +147,12 @@ def create_word_document(cv_data,html_content, output_file):
 
     document = Document()
     section = document.sections[0]
-    section.top_margin = Cm(1.0)  # Adjust the top margin in centimeters
+    section.top_margin = Cm(0.3)  # Adjust the top margin in centimeters
     name_paragraph = document.add_paragraph()
     name_paragraph.add_run(mockCVData[0]['name']).bold = True
     name_paragraph.alignment = 1  # 1 means centered alignment
+    name_paragraph_format = name_paragraph.paragraph_format
+    name_paragraph_format.space_after = Pt(1)
 
     contact_info_paragraph = document.add_paragraph()
     contact_info_paragraph.add_run(cv_data['email'])
@@ -178,7 +180,7 @@ def create_word_document(cv_data,html_content, output_file):
 rendered_cv = template.render(cv_data=mockCVData[0])
 
 # Convert HTML to Word document
-output_file_path = 'output_cv.docx'
+output_file_path = 'output_cv4.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
