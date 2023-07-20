@@ -160,6 +160,8 @@ def create_word_document(cv_data,html_content, output_file):
     document = Document()
     section = document.sections[0]
     section.top_margin = Cm(0.3)  # Adjust the top margin in centimeters
+    section.left_margin = Cm(1.0)
+    section.right_margin = Cm(1.0)
     name_paragraph = document.add_paragraph()
     name_run = name_paragraph.add_run(cv_data['name'])
 
@@ -214,7 +216,7 @@ def create_word_document(cv_data,html_content, output_file):
     line_style.font.underline = True
 
     # Add a paragraph with an underscore character and apply the custom style
-    line_paragraph = document.add_paragraph("________________________________________________________________________________________________________", style='HorizontalLine')
+    line_paragraph = document.add_paragraph("___________________________________________________________________________________________________________________", style='HorizontalLine')
     
     # education_details_paragraph = document.add_paragraph()
     # education_details_paragraph.add_run(f"{cv_data['education'][0]['university']} - {cv_data['education'][0]['location']}")
@@ -243,7 +245,7 @@ def create_word_document(cv_data,html_content, output_file):
 
         # Set tab stops for right alignment of start date and end date
         tab_stops = education_details_paragraph.paragraph_format.tab_stops
-        tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
+        tab_stops.add_tab_stop(Inches(7.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
 
         # Add the start date and end date with right-aligned tab stops
         education_details_paragraph.add_run("\t")  # Add a tab character for right alignment
@@ -273,8 +275,9 @@ def create_word_document(cv_data,html_content, output_file):
     # Center align the "Professional Experience" title paragraph
     experience_title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
+    experience_title_paragraph.paragraph_format.space_after = Pt(0)
     # Add a paragraph with an underscore character and apply the custom style for horizontal line
-    experience_line_paragraph = document.add_paragraph("________________________________________________________________________________________________________", style='HorizontalLine')
+    experience_line_paragraph = document.add_paragraph("---------------------------------------------------------------------------", style='HorizontalLine')
 
     for experience_entry in cv_data['professionalExperience']:
         # Adding the professional experience details
@@ -283,7 +286,7 @@ def create_word_document(cv_data,html_content, output_file):
         experience_details_paragraph.add_run(experience_details_line)
 
         tab_stops = experience_details_paragraph.paragraph_format.tab_stops
-        tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
+        tab_stops.add_tab_stop(Inches(7.5), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.SPACES)  # Right align the tab at 6.5 inches
 
         # Add the start date and end date with right-aligned tab stops
         experience_details_paragraph.add_run("\t")  # Add a tab character for right alignment
@@ -309,7 +312,7 @@ def create_word_document(cv_data,html_content, output_file):
 rendered_cv = template.render(cv_data=mockCVData[0])
 
 # Convert HTML to Word document
-output_file_path = 'output_cv27.docx'
+output_file_path = 'output_cv33.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
