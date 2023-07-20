@@ -122,7 +122,7 @@ mockCVData = [
 
 # Load the Jinja environment and specify the directory containing the template file
 env = Environment(loader=FileSystemLoader('.'))
-template = env.get_template('sample.html')
+template = env.get_template('resume_template.html')
 
 def strip_tags(html):
     class MLStripper(HTMLParser):
@@ -170,22 +170,15 @@ def create_word_document(cv_data,html_content, output_file):
     contact_info_paragraph.alignment = 1
 
 
-
-
-
-
-
-
     document.add_paragraph(plain_text, style='BodyText')
 
     # Save the Word document
     document.save(output_file)
-
 # Rendering the template with the CV data
 rendered_cv = template.render(cv_data=mockCVData[0])
 
 # Convert HTML to Word document
-output_file_path = 'cv_output13.docx'
+output_file_path = 'output_cv.docx'
 create_word_document(mockCVData[0],rendered_cv, output_file_path)
 
 print(f"Word document '{output_file_path}' created successfully.")
